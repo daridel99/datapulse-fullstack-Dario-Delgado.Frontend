@@ -1,7 +1,7 @@
 [build]
   base = "datapulse-frontend"
   command = "npm install && npm run build"
-  publish = "datapulse-frontend/dist/frontend"
+  publish = "dist/frontend"
 
 [[redirects]]
   from = "/*"
