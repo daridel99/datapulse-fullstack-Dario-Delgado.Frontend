@@ -1,0 +1,9 @@
+[build]
+  base = "datapulse-frontend"
+  command = "npm install && npm run build"
+  publish = "datapulse-frontend/dist/frontend"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
