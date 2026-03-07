@@ -27,4 +27,8 @@ export class PaisService {
   getTipoCambio(codigoIso: string): Observable<PaginatedResponse<TipoCambio>> {
     return this.http.get<PaginatedResponse<TipoCambio>>(`${this.apiUrl}/${codigoIso}/tipo-cambio/`);
   }
+
+  syncIndicadores(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/sync-indicadores/`, {});
+  }
 }
