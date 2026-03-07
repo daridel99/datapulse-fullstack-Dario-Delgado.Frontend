@@ -1,33 +1,34 @@
 import { Routes } from '@angular/router';
-
-import { LoginComponent } from './modules/auth/login/login.component';
-import { RegisterComponent } from './modules/auth/register/register.component';
-import { DashboardComponent } from './modules/dashboard/dashboard/dashboard.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   {
-    path: 'auth/login',
-    component: LoginComponent
+    path: 'auth',
+    loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
   },
-
   {
-    path: 'auth/register',
-    component: RegisterComponent
-  },
-  
-   {
     path: 'dashboard',
-    loadComponent: () =>
-      import('./modules/dashboard/dashboard/dashboard.component')
-      .then(m => m.DashboardComponent)
+    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [authGuard]
   },
-
   {
-    path: '',
-    redirectTo: 'auth/login',
-    pathMatch: 'full'
+    path: 'paises',
+    loadChildren: () => import('./features/paises/paises.routes').then(m => m.PAISES_ROUTES),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'portafolios',
+    loadChildren: () => import('./features/portafolios/portafolios.routes').then(m => m.PORTAFOLIOS_ROUTES),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'alertas',
+    loadComponent: () => import('./features/alertas/alertas.component').then(m => m.AlertasComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent)
   }
-
 ];
-
