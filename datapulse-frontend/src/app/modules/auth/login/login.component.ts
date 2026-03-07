@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { AuthService } from '../../../core/auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,16 +10,46 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angula
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html'
 })
+
+
 export class LoginComponent {
 
-  errorMessage = '';
   loginForm!: FormGroup;
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
 
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
+    });
+
+  }
+
+  onSubmit() {
+
+    if (this.loginForm.invalid) return;
+
+    this.authService.login(this.loginForm.value).subscribe({
+
+      next: (res) => {
+
+        console.log('LOGIN OK', res);
+        
+        this.authService.saveToken(res.access);
+
+        this.router.navigate(['/dashboard']);
+
+      },
+
+      error: () => {
+        this.errorMessage = 'Credenciales inválidas';
+      }
+
     });
 
   }
