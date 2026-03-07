@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HttpParams } from '@angular/common/http';
 import { PaisService } from '../../../core/services/pais.service';
 import { Pais } from '../../../core/models/pais.model';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-paises-list',
@@ -21,10 +22,18 @@ import { Pais } from '../../../core/models/pais.model';
     CommonModule, RouterLink, FormsModule,
     MatTableModule, MatPaginatorModule, MatFormFieldModule,
     MatInputModule, MatSelectModule, MatButtonModule,
-    MatIconModule, MatProgressSpinnerModule
+    MatIconModule, MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   template: `
-    <h2>Paises</h2>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2>Paises</h2>
+      <button mat-raised-button color="primary" (click)="syncIndicadores()">
+        <mat-icon>sync</mat-icon>
+        Sincronizar indicadores
+      </button>
+    </div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
@@ -83,6 +92,7 @@ import { Pais } from '../../../core/models/pais.model';
 })
 export class PaisesListComponent implements OnInit {
   private paisService = inject(PaisService);
+  private snackBar = inject(MatSnackBar);
 
   paises: Pais[] = [];
   loading = true;
@@ -118,4 +128,26 @@ export class PaisesListComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.loadData();
   }
+
+  syncIndicadores() {
+  this.loading = true;
+
+  this.paisService.syncIndicadores().subscribe({
+    next: () => {
+      this.snackBar.open('Indicadores sincronizados correctamente', 'Cerrar', {
+        duration: 3000
+      });
+      this.loadData();
+    },
+    error: () => {
+      this.snackBar.open('Error al sincronizar indicadores', 'Cerrar', {
+        duration: 3000
+      });
+    },
+    complete: () => {
+      this.loading = false;
+      }
+    });
+  }
+
 }
