@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { AuthService } from '../../../core/auth/services/auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +10,6 @@ import { Router } from '@angular/router';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html'
 })
-
-
 export class LoginComponent {
 
   loginForm!: FormGroup;
@@ -34,12 +32,14 @@ export class LoginComponent {
 
     if (this.loginForm.invalid) return;
 
+    this.errorMessage = '';
+
     this.authService.login(this.loginForm.value).subscribe({
 
       next: (res) => {
 
         console.log('LOGIN OK', res);
-        
+
         this.authService.saveToken(res.access);
 
         this.router.navigate(['/dashboard']);
