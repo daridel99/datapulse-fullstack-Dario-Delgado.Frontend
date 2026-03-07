@@ -25,6 +25,7 @@ export class AuthService {
       tap(res => {
         localStorage.setItem('access_token', res.access);
         localStorage.setItem('refresh_token', res.refresh);
+        console.log("LOGIN EJECUTADO");
         this.loadUser();
       })
     );
