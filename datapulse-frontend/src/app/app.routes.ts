@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { LoginComponent } from './modules/auth/login/login.component';
 import { RegisterComponent } from './modules/auth/register/register.component';
+import { DashboardComponent } from './modules/dashboard/dashboard/dashboard.component';
 
 export const routes: Routes = [
 
@@ -14,6 +15,13 @@ export const routes: Routes = [
     path: 'auth/register',
     component: RegisterComponent
   },
+  
+   {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./modules/dashboard/dashboard/dashboard.component')
+      .then(m => m.DashboardComponent)
+  },
 
   {
     path: '',
@@ -22,3 +30,4 @@ export const routes: Routes = [
   }
 
 ];
+
