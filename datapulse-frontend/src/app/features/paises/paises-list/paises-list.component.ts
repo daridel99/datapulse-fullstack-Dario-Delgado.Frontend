@@ -134,7 +134,7 @@ export class PaisesListComponent implements OnInit {
 
   this.paisService.syncIndicadores().subscribe({
     next: () => {
-      this.snackBar.open('Indicadores sincronizados correctamente', 'Cerrar', {
+      this.snackBar.open('Se envio la solicitud para sincronizar indicadores', 'Cerrar', {
         duration: 3000
       });
       this.loadData();
