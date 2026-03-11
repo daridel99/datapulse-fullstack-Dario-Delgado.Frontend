@@ -14,6 +14,7 @@ import { HttpParams } from '@angular/common/http';
 import { PaisService } from '../../../core/services/pais.service';
 import { Pais } from '../../../core/models/pais.model';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-paises-list',
@@ -29,10 +30,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
       <h2>Paises</h2>
+    @if (isAdmin) {
       <button mat-raised-button color="primary" (click)="syncIndicadores()">
         <mat-icon>sync</mat-icon>
         Sincronizar indicadores
       </button>
+    }
     </div>
 
     <div class="filters">
@@ -93,8 +96,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class PaisesListComponent implements OnInit {
   private paisService = inject(PaisService);
   private snackBar = inject(MatSnackBar);
+  private authService = inject(AuthService);
 
   paises: Pais[] = [];
+  isAdmin = false;
   loading = true;
   search = '';
   regionFilter = '';
@@ -104,6 +109,9 @@ export class PaisesListComponent implements OnInit {
   displayedColumns = ['nombre', 'region', 'moneda', 'poblacion'];
 
   ngOnInit(): void {
+    this.authService.user$.subscribe(user => {
+      this.isAdmin = user?.rol === 'ADMIN';
+    });
     this.loadData();
   }
 
@@ -131,8 +139,8 @@ export class PaisesListComponent implements OnInit {
 
   syncIndicadores() {
   this.loading = true;
-
   this.paisService.syncIndicadores().subscribe({
+
     next: () => {
       this.snackBar.open('Se envio la solicitud para sincronizar indicadores', 'Cerrar', {
         duration: 3000
