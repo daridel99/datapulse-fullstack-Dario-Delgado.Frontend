@@ -203,7 +203,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.riesgoService.getAll().subscribe(data => {
-      this.riesgos = (Array.isArray(data) ? data : data.results || []).sort((a, b) => b.indice - a.indice);
+
+      const list = (Array.isArray(data) ? data : data.results || []);
+      const unique = new Map<string, IndiceRiesgo>();
+
+      list.forEach(r => {
+        if (!unique.has(r.codigo_iso)) {
+          unique.set(r.codigo_iso, r);
+        }
+      });
+
+      this.riesgos = Array.from(unique.values())
+        .sort((a, b) => b.indice - a.indice);
+
       this.loading = false;
     });
 
