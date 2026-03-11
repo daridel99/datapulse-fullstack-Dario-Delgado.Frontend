@@ -305,8 +305,10 @@ export class PortafolioDetailComponent implements OnInit {
     const byPais: Record<string, number> = {};
     const byTipo: Record<string, number> = {};
     for (const p of posiciones) {
-      byPais[p.pais] = (byPais[p.pais] || 0) + p.monto_inversion_usd;
-      byTipo[p.tipo_activo] = (byTipo[p.tipo_activo] || 0) + p.monto_inversion_usd;
+      const monto = Number(p.monto_inversion_usd);
+      
+      byPais[p.pais] = (byPais[p.pais] || 0) + monto;
+      byTipo[p.tipo_activo] = (byTipo[p.tipo_activo] || 0) + monto;
     }
     this.pieData = Object.entries(byPais).map(([name, value]) => ({ name, value }));
     this.donutData = Object.entries(byTipo).map(([name, value]) => ({ name, value }));
