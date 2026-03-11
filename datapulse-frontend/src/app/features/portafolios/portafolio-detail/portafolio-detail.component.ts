@@ -121,12 +121,20 @@ import { Observable, map, startWith } from 'rxjs';
                 <th mat-header-cell *matHeaderCellDef>Fecha Entrada</th>
                 <td mat-cell *matCellDef="let pos">{{ pos.fecha_entrada | date:'shortDate' }}</td>
               </ng-container>
+              <ng-container matColumnDef="fecha_salida">
+                <th mat-header-cell *matHeaderCellDef>Fecha Salida</th>
+                <td mat-cell *matCellDef="let pos">{{ pos.fecha_salida | date:'shortDate' }}</td>
+              </ng-container>
               <ng-container matColumnDef="acciones">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let pos">
                   @if (canEdit) {
-                    <button mat-icon-button color="warn" (click)="deletePosicion(pos)">
-                      <mat-icon>delete</mat-icon>
+                    <button 
+                    mat-icon-button 
+                    color="warn" 
+                    (click)="deletePosicion(pos)"
+                    [disabled]="pos.fecha_salida">
+                    <mat-icon>delete</mat-icon>
                     </button>
                   }
                 </td>
@@ -240,12 +248,12 @@ export class PortafolioDetailComponent implements OnInit {
   loading = true;
   canEdit = false;
   totalInvertido = 0;
-  posColumns = ['pais', 'tipo_activo', 'monto', 'fecha_entrada', 'acciones'];
+  posColumns = ['pais', 'tipo_activo', 'monto', 'fecha_entrada','fecha_salida', 'acciones'];
   pieData: any[] = [];
   donutData: any[] = [];
   paises: Pais[] = [];
   filteredPaises$!: Observable<Pais[]>;
-  today = new Date().toISOString().split('T')[0];
+  today = new Date().toISOString().split('en-CA');
 
   posForm = this.fb.group({
     pais: ['', Validators.required],
