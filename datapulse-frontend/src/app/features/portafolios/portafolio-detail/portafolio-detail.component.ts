@@ -343,7 +343,7 @@ export class PortafolioDetailComponent implements OnInit {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `portafolio_${this.portafolio!.id}.pdf`;
+      a.download = `portafolio_${this.portafolio!.id}_${new Date().toISOString().split('T')[0]}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     });
