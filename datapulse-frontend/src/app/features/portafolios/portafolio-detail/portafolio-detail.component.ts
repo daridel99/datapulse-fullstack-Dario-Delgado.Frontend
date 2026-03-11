@@ -295,7 +295,7 @@ export class PortafolioDetailComponent implements OnInit {
     this.portafolioService.getById(id).subscribe(data => {
       this.portafolio = data;
       const posiciones = data.posiciones || [];
-      this.totalInvertido = posiciones.reduce((sum, p) => sum + p.monto_inversion_usd, 0);
+            this.totalInvertido = posiciones.reduce( (sum, p) => sum + parseFloat(String(p.monto_inversion_usd ?? '0')), 0);
       this.buildCharts(posiciones);
       this.loading = false;
     });
